@@ -3,7 +3,7 @@ WORKDIR /app
 
 COPY bytebuzz-backend /app
 
-RUN mvn clean package -DskipTests
+RUN mvn -f /app/pom.xml clean package -DskipTests
 
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
