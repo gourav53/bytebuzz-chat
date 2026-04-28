@@ -20,7 +20,9 @@
 ---
 
 ## 🎥 Live Demo & Preview
-> https://github.com/user-attachments/assets/33c87b82-af57-4746-acd4-31f8a96189fc
+> 
+
+
 
 
 ---
@@ -73,7 +75,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/rachitsharma300/bytebuzz-chat-app.git
+git clone https://github.com/gourav53/bytebuzz-chat-app.git
 cd bytebuzz-chat-app
 
 # Run with Docker
@@ -116,4 +118,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 <br>
 
-<p align="center"> Made with ❤️ by <a href="https://github.com/rachitsharma300">Rachit Sharma</a> </p>
+<p align="center"> Made with ❤️ by <a href="https://github.com/gourav53">Gourav Chouhan/a> </p>
