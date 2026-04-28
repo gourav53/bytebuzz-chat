@@ -42,7 +42,7 @@
 🚀 Quick Start
 
 # Clone the repository
-git clone https://github.com/gourav53/bytebuzz-chat-app.git
+git clone https://github.com/gourav53/bytebuzz-chat-app.git             
 cd bytebuzz-chat-app
 
 # Run backend
