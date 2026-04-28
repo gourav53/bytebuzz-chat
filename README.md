@@ -42,7 +42,7 @@
 🚀 Quick Start
 
 # Clone the repository
-git clone https://github.com/gourav53/bytebuzz-chat-app.git             
+git clone https://github.com/gourav53/bytebuzz-chat.git
 cd bytebuzz-chat-app
 
 # Run backend
@@ -83,5 +83,5 @@ This project is licensed under the MIT License.
 
 <p align="center">
   Made with ❤️ by 
-  <a href="https://github.com/gourav53">Gourav Chouhan</a>
+  <a href="https://github.com/gourav53">Gourav Chouhan </a>
 </p>
