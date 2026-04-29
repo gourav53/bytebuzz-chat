@@ -2,6 +2,7 @@ C:\Users\HP\Desktop\bytebuzz-chat-app-main\bytebuzz-backend\src\main\java\com\ra
 C:\Users\HP\Desktop\bytebuzz-chat-app-main\bytebuzz-backend\src\main\java\com\rachit\bytebuzz\backend\config\AppConstants.java
 C:\Users\HP\Desktop\bytebuzz-chat-app-main\bytebuzz-backend\src\main\java\com\rachit\bytebuzz\backend\config\WebSocketConfig.java
 C:\Users\HP\Desktop\bytebuzz-chat-app-main\bytebuzz-backend\src\main\java\com\rachit\bytebuzz\backend\controllers\ChatController.java
+C:\Users\HP\Desktop\bytebuzz-chat-app-main\bytebuzz-backend\src\main\java\com\rachit\bytebuzz\backend\controllers\HomeController.java
 C:\Users\HP\Desktop\bytebuzz-chat-app-main\bytebuzz-backend\src\main\java\com\rachit\bytebuzz\backend\controllers\RoomController.java
 C:\Users\HP\Desktop\bytebuzz-chat-app-main\bytebuzz-backend\src\main\java\com\rachit\bytebuzz\backend\entities\Message.java
 C:\Users\HP\Desktop\bytebuzz-chat-app-main\bytebuzz-backend\src\main\java\com\rachit\bytebuzz\backend\entities\Room.java
