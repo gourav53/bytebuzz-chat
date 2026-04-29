@@ -1,4 +1,4 @@
-package backend.controllers;
+package com.rachit.bytebuzz.backend.controllers;
 
 import org.springframework.web.bind.annotation.*;
 
