@@ -1,13 +1,3 @@
-package com.rachit.bytebuzz.backend.controllers;
-
-import com.rachit.bytebuzz.backend.entities.Room;
-import com.rachit.bytebuzz.backend.repositories.RoomRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/rooms")
 @CrossOrigin(origins = "*")
@@ -19,20 +9,22 @@ public class RoomController {
         this.roomRepository = roomRepository;
     }
 
+    // ✅ ROOT endpoint (IMPORTANT)
+    @GetMapping("/")
+    public String home() {
+        return "Backend running 🚀";
+    }
+
     // 🔹 CREATE ROOM
     @PostMapping
     public ResponseEntity<?> createRoom(@RequestBody Room room) {
 
-        // agar roomId nahi diya to auto generate
         if (room.getRoomId() == null || room.getRoomId().isEmpty()) {
             room.setRoomId(UUID.randomUUID().toString());
         }
 
-        // check already exist
         if (roomRepository.findByRoomId(room.getRoomId()) != null) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Room already exists!");
+            return ResponseEntity.badRequest().body("Room already exists!");
         }
 
         Room savedRoom = roomRepository.save(room);
@@ -46,9 +38,7 @@ public class RoomController {
         Room room = roomRepository.findByRoomId(roomId);
 
         if (room == null) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Room not found!");
+            return ResponseEntity.badRequest().body("Room not found!");
         }
 
         return ResponseEntity.ok(room);
