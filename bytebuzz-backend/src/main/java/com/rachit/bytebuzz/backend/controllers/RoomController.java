@@ -2,6 +2,8 @@ package com.rachit.bytebuzz.backend.controllers;
 
 import com.rachit.bytebuzz.backend.entities.Room;
 import com.rachit.bytebuzz.backend.repositories.RoomRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,22 +19,38 @@ public class RoomController {
         this.roomRepository = roomRepository;
     }
 
-    // Create Room
+    // 🔹 CREATE ROOM
     @PostMapping
-    public Room createRoom(@RequestBody Room room) {
+    public ResponseEntity<?> createRoom(@RequestBody Room room) {
+
+        // agar roomId nahi diya to auto generate
         if (room.getRoomId() == null || room.getRoomId().isEmpty()) {
             room.setRoomId(UUID.randomUUID().toString());
         }
-        return roomRepository.save(room);
+
+        // check already exist
+        if (roomRepository.findByRoomId(room.getRoomId()) != null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Room already exists!");
+        }
+
+        Room savedRoom = roomRepository.save(room);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 
-    // Join/Get Room
+    // 🔹 JOIN / GET ROOM
     @GetMapping("/{roomId}")
-    public Room getRoom(@PathVariable String roomId) {
+    public ResponseEntity<?> getRoom(@PathVariable String roomId) {
+
         Room room = roomRepository.findByRoomId(roomId);
+
         if (room == null) {
-            throw new RuntimeException("Room not found");
+            return ResponseEntity
+                    .badRequest()
+                    .body("Room not found!");
         }
-        return room;
+
+        return ResponseEntity.ok(room);
     }
 }
