@@ -7,49 +7,57 @@ import { baseURL } from "../config/AxiosHelper";
 import toast from "react-hot-toast";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-import { getMessagess } from "../services/RoomService";
+import { getMessages } from "../services/RoomService"; // ✅ FIX
 import { timeAgo } from "../config/helper";
 
 const ChatPage = () => {
-  const { roomId, currentUser, connected, setRoomId, setCurrentUser, setConnected } = useChatContext();
+  const { roomId, currentUser, connected, setRoomId, setCurrentUser, setConnected } =
+    useChatContext();
+
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const chatBoxRef = useRef(null);
   const [stompClient, setStompClient] = useState(null);
 
-  // ✅ FIRST LETTER AVATAR FUNCTION
+  // Avatar initial
   const getInitial = (name) => {
     return name ? name.charAt(0).toUpperCase() : "?";
   };
 
-  // optional: color generate (same user same color)
   const getColor = (name) => {
     const colors = ["bg-blue-500", "bg-green-500", "bg-purple-500", "bg-pink-500", "bg-yellow-500"];
     const index = name ? name.charCodeAt(0) % colors.length : 0;
     return colors[index];
   };
 
+  // Redirect if not connected
   useEffect(() => {
     if (!connected) navigate("/");
   }, [connected]);
 
+  // Load old messages
   useEffect(() => {
     async function loadMessages() {
       try {
-        const msgs = await getMessagess(roomId);
+        const msgs = await getMessages(roomId); // ✅ FIX
         setMessages(msgs);
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
     }
-    if (connected) loadMessages();
-  }, [connected]);
 
+    if (connected) loadMessages();
+  }, [connected, roomId]);
+
+  // Auto scroll
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
 
+  // WebSocket connect
   useEffect(() => {
     const sock = new SockJS(`${baseURL}/chat`);
     const client = Stomp.over(() => sock);
@@ -63,10 +71,15 @@ const ChatPage = () => {
         setMessages((prev) => [...prev, newMsg]);
       });
     });
+
+    return () => {
+      client.disconnect();
+    };
   }, [roomId]);
 
+  // Send message
   const sendMessage = () => {
-    if (!input.trim()) return;
+    if (!input.trim() || !stompClient) return;
 
     const message = {
       sender: currentUser,
@@ -78,6 +91,7 @@ const ChatPage = () => {
     setInput("");
   };
 
+  // Logout
   const handleLogout = () => {
     stompClient?.disconnect();
     setConnected(false);
@@ -128,21 +142,15 @@ const ChatPage = () => {
                   : "bg-gray-200 text-black dark:bg-gray-700 dark:text-white"
               }`}
             >
-              {/* ✅ LETTER AVATAR */}
               <div
                 className={`w-8 h-8 flex items-center justify-center rounded-full text-white font-bold ${getColor(msg.sender)}`}
               >
                 {getInitial(msg.sender)}
               </div>
 
-              {/* MESSAGE */}
               <div>
                 <p className="font-bold text-sm">{msg.sender}</p>
-
-                <p className="text-sm break-words">
-                  {msg.content || "..."}
-                </p>
-
+                <p className="text-sm break-words">{msg.content || "..."}</p>
                 <p className="text-xs opacity-70 mt-1">
                   {timeAgo(msg.timeStamp)}
                 </p>
@@ -163,10 +171,7 @@ const ChatPage = () => {
             placeholder="Type message..."
           />
 
-          <button
-            onClick={sendMessage}
-            className="text-blue-500 px-2"
-          >
+          <button onClick={sendMessage} className="text-blue-500 px-2">
             <MdSend size={20} />
           </button>
         </div>
