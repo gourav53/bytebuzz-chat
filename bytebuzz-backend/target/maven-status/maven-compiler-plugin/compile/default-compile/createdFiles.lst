@@ -1,4 +1,5 @@
 com\rachit\bytebuzz\backend\payload\MessageRequest.class
+com\rachit\bytebuzz\backend\config\CorsConfig.class
 com\rachit\bytebuzz\backend\entities\Message.class
 com\rachit\bytebuzz\backend\BytebuzzBackendApplication.class
 com\rachit\bytebuzz\backend\repositories\RoomRepository.class
