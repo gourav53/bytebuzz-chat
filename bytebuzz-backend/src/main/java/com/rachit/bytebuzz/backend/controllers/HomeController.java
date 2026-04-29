@@ -1,13 +1,13 @@
-package com.rachit.bytebuzz.backend.controllers;
+package backend.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 public class HomeController {
 
-    @GetMapping("/")
-    public String home() {
+    @GetMapping("/test")
+    public String test() {
         return "Backend chal raha hai 🚀";
     }
 }
