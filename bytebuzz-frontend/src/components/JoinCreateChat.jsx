@@ -73,7 +73,9 @@ const JoinCreateChat = () => {
   async function createRoom() {
     if (validateForm()) {
       try {
-        const response = await createRoomApi(detail.roomId, roomType);
+       const response = await createRoomApi({
+         roomId: detail.roomId,
+       });
         toast.success(`Room created successfully (${roomType})`);
         setCurrentUser(detail.userName);
         setRoomId(response.roomId);
