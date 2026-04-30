@@ -7,7 +7,6 @@ import { baseURL } from "../config/AxiosHelper";
 import toast from "react-hot-toast";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-import { getMessages } from "../services/RoomService";
 import { timeAgo } from "../config/helper";
 
 const ChatPage = () => {
@@ -26,21 +25,36 @@ const ChatPage = () => {
   const chatBoxRef = useRef(null);
   const stompClientRef = useRef(null);
 
-  // 🔒 redirect if not connected
+  // ✅ Avatar helpers
+  const getInitial = (name) => {
+    return name ? name.charAt(0).toUpperCase() : "?";
+  };
+
+  const getColor = (name) => {
+    const colors = [
+      "bg-blue-500",
+      "bg-green-500",
+      "bg-purple-500",
+      "bg-pink-500",
+      "bg-yellow-500",
+    ];
+    const index = name ? name.charCodeAt(0) % colors.length : 0;
+    return colors[index];
+  };
+
+  // redirect
   useEffect(() => {
     if (!connected) navigate("/");
   }, [connected]);
 
-
-
-  // 📜 auto scroll
+  // auto scroll
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // 🔌 websocket connect
+  // websocket
   useEffect(() => {
     if (!connected || !roomId) return;
 
@@ -58,13 +72,11 @@ const ChatPage = () => {
     });
 
     return () => {
-      if (stompClientRef.current) {
-        stompClientRef.current.disconnect();
-      }
+      stompClientRef.current?.disconnect();
     };
   }, [roomId, connected]);
 
-  // ✉️ send message
+  // send
   const sendMessage = () => {
     if (!input.trim()) return;
 
@@ -83,7 +95,7 @@ const ChatPage = () => {
     setInput("");
   };
 
-  // 🚪 logout
+  // logout
   const handleLogout = () => {
     stompClientRef.current?.disconnect();
     setConnected(false);
@@ -128,21 +140,33 @@ const ChatPage = () => {
             }`}
           >
             <div
-              className={`p-3 rounded-xl max-w-xs break-words shadow ${
+              className={`flex gap-2 p-3 rounded-xl max-w-xs break-words shadow ${
                 msg.sender === currentUser
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-black dark:bg-gray-700 dark:text-white"
               }`}
             >
-              <p className="font-bold text-sm">{msg.sender}</p>
+              {/* AVATAR */}
+              <div
+                className={`w-8 h-8 flex items-center justify-center rounded-full text-white font-bold ${getColor(
+                  msg.sender || "User"
+                )}`}
+              >
+                {getInitial(msg.sender || "User")}
+              </div>
 
-              <p className="text-sm break-words">
-                {msg.content || "..."}
-              </p>
+              {/* MESSAGE */}
+              <div>
+                <p className="font-bold text-sm">{msg.sender || "User"}</p>
 
-              <p className="text-xs opacity-70 mt-1">
-                {timeAgo(msg.timeStamp)}
-              </p>
+                <p className="text-sm break-words">
+                  {msg.content || "..."}
+                </p>
+
+                <p className="text-xs opacity-70 mt-1">
+                  {timeAgo(msg.timeStamp)}
+                </p>
+              </div>
             </div>
           </div>
         ))}
@@ -159,10 +183,7 @@ const ChatPage = () => {
             placeholder="Type message..."
           />
 
-          <button
-            onClick={sendMessage}
-            className="text-blue-500 px-2"
-          >
+          <button onClick={sendMessage} className="text-blue-500 px-2">
             <MdSend size={20} />
           </button>
         </div>
