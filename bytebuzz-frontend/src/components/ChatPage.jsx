@@ -175,15 +175,16 @@ const ChatPage = () => {
                   {msg.content || "..."}
                 </p>
 
-                <p className="text-xs opacity-70 mt-1">
-                  {msg.timeStamp
-                    ? new Date(msg.timeStamp).toLocaleTimeString("en-IN", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        timeZone: "Asia/Kolkata",
-                      })
-                    : ""}
-                </p>
+               <p className="text-xs opacity-70 mt-1">
+                 {msg.timeStamp
+                   ? new Date(
+                       new Date(msg.timeStamp).getTime() + 5.5 * 60 * 60 * 1000
+                     ).toLocaleTimeString("en-IN", {
+                       hour: "2-digit",
+                       minute: "2-digit",
+                     })
+                   : ""}
+               </p>
               </div>
             </div>
           </div>
