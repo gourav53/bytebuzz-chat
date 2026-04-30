@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: "/",   // ✅ ये line जरूरी है
+  base: "./",   // ✅ ये line जरूरी है
 })
