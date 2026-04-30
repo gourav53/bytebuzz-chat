@@ -7,7 +7,6 @@ import { baseURL } from "../config/AxiosHelper";
 import toast from "react-hot-toast";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-import { timeAgo } from "../config/helper";
 
 const ChatPage = () => {
   const {
@@ -25,10 +24,9 @@ const ChatPage = () => {
   const chatBoxRef = useRef(null);
   const stompClientRef = useRef(null);
 
-  // ✅ Avatar helpers
-  const getInitial = (name) => {
-    return name ? name.charAt(0).toUpperCase() : "?";
-  };
+  // avatar helpers
+  const getInitial = (name) =>
+    name ? name.charAt(0).toUpperCase() : "?";
 
   const getColor = (name) => {
     const colors = [
@@ -42,7 +40,7 @@ const ChatPage = () => {
     return colors[index];
   };
 
-  // redirect
+  // redirect if not connected
   useEffect(() => {
     if (!connected) navigate("/");
   }, [connected]);
@@ -50,11 +48,12 @@ const ChatPage = () => {
   // auto scroll
   useEffect(() => {
     if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+      chatBoxRef.current.scrollTop =
+        chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // websocket
+  // websocket connection
   useEffect(() => {
     if (!connected || !roomId) return;
 
@@ -66,8 +65,17 @@ const ChatPage = () => {
       toast.success("Connected");
 
       client.subscribe(`/topic/room/${roomId}`, (msg) => {
-        const newMsg = JSON.parse(msg.body);
-        setMessages((prev) => [...prev, newMsg]);
+        console.log("RAW:", msg);
+        console.log("BODY:", msg.body);
+
+        try {
+          const newMsg = JSON.parse(msg.body);
+          console.log("PARSED:", newMsg);
+
+          setMessages((prev) => [...prev, newMsg]);
+        } catch (e) {
+          console.error("JSON ERROR:", e);
+        }
       });
     });
 
@@ -76,7 +84,7 @@ const ChatPage = () => {
     };
   }, [roomId, connected]);
 
-  // send
+  // send message
   const sendMessage = () => {
     if (!input.trim()) return;
 
@@ -136,7 +144,9 @@ const ChatPage = () => {
           <div
             key={i}
             className={`flex mb-4 ${
-              msg.sender === currentUser ? "justify-end" : "justify-start"
+              msg.sender === currentUser
+                ? "justify-end"
+                : "justify-start"
             }`}
           >
             <div
@@ -157,7 +167,9 @@ const ChatPage = () => {
 
               {/* MESSAGE */}
               <div>
-                <p className="font-bold text-sm">{msg.sender || "User"}</p>
+                <p className="font-bold text-sm">
+                  {msg.sender || "User"}
+                </p>
 
                 <p className="text-sm break-words">
                   {msg.content || "..."}
@@ -184,12 +196,17 @@ const ChatPage = () => {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            onKeyDown={(e) =>
+              e.key === "Enter" && sendMessage()
+            }
             className="flex-1 px-3 bg-transparent outline-none text-black dark:text-white"
             placeholder="Type message..."
           />
 
-          <button onClick={sendMessage} className="text-blue-500 px-2">
+          <button
+            onClick={sendMessage}
+            className="text-blue-500 px-2"
+          >
             <MdSend size={20} />
           </button>
         </div>
